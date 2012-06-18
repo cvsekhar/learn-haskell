@@ -81,11 +81,15 @@ scanremove (x:y:z:xs) (ys) = if (turn x y z) == DRight
                         else scanremove (y:z:xs) (x:ys)
 
 -- graham scan algorithm
+gscanp :: [Point] -> [Point]
+gscanp xs =  scanremove sl []
+             where lc = lowestycoord (head xs) xs
+                   sl = lc : sortBy (comparepointsangle lc) (delete lc xs)
+
+-- graham scan algorithm
 gscan :: [(Double,Double)] -> [(Double,Double)]
-gscan xs = cptoxy (scanremove sl []) []
-           where lc = lowestycoord (head cp) cp
-                 sl = lc : sortBy (comparepointsangle lc) (delete lc cp)
-                 cp = cxytop xs []
+gscan xs = cptoxy (gscanp(cxytop xs [])) []
+                   
 
 -- gscan [(0,0),(2,0),(0,2),(2,2),(1,1)]
 -- gscan [(-3,1),(-4,1),(-1,4),(0,0),(2,2),(-1,3),(-1,2),(1,0),(3,-1),(-1,-1)] test case from ch3 RWH comments
